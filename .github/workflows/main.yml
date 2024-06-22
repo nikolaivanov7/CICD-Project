@@ -27,5 +27,5 @@ jobs:
         with:
           push: true
           tags: ivanovn7/library-management-system:latest
-          context: .  # Ensure this is correct based on your repository structure
+          context: .  
 
