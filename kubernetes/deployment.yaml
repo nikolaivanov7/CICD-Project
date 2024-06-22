@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: library-management-system
+  namespace: library-management-system
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: library-management-system
+  template:
+    metadata:
+      labels:
+        app: library-management-system
+    spec:
+      containers:
+        - name: library-management-system
+          image: ivanovn7/library-management-system:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi"
+            requests:
+              memory: "256Mi"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: SPRING_DATASOURCE_URL
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: SPRING_JPA_HIBERNATE_DDL_AUTO
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: SPRING_JPA_DATABASE_PLATFORM
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secret
+                  key: password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: library-management-system
+data:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://database-service:5432/postgres"
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
+  SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: "public"
+  SPRING_JPA_DATABASE_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-secret
+  namespace: library-management-system
+type: Opaque
+data:
+  username: cG9zdGdyZXM=
+  password: MTIzNA==

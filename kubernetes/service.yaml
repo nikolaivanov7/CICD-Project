@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-management-system
+  namespace: library-management-system
+spec:
+  selector:
+    app: library-management-system
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+  namespace: library-management-system
+spec:
+  selector:
+    app: postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+
