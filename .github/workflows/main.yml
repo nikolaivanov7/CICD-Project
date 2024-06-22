@@ -10,6 +10,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         
+      - name: List files in build context
+        run: ls -lR
+      
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
         
@@ -27,4 +30,4 @@ jobs:
         with:
           push: true
           tags: ivanovn7/library-management-system:latest
-          
+          context: .  # Ensure this is correct based on your repository structure
