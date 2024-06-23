@@ -5,10 +5,10 @@ metadata:
   namespace: library-management-system
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-    - host: library-domain.com
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
